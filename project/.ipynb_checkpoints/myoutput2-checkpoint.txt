@@ -1,0 +1,7 @@
+nohup: ignoring input
+Torch Version: 2.2.0+cu121
+TorchText Version: 0.17.0+cpu
+cuda
+Input shape: torch.Size([32, 40])
+Target shape: torch.Size([32, 40])
+Training...:   0%|                                                                                                        | 0/100 [00:00<?, ?it/s]
