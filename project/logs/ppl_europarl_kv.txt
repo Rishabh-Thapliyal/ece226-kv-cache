@@ -1,0 +1,46 @@
+nohup: ignoring input
+cuda
+Path to dataset files: /home/rthapliyal/.cache/kagglehub/datasets/nltkdata/europarl/versions/1
+First 5 sentences:
+1: Adoption of the Minutes of the previous sitting The Minutes of yesterday ' s sitting have been distributed .
+2: Are there any comments ?
+3: Mr President , I see in the Minutes that two Members spoke yesterday about delayed flights to Strasbourg on Monday .
+4: I would like to add that the flight from Amsterdam ' s Schipol airport was also delayed and then cancelled .
+5: We were diverted to Basel-Mulhouse Airport .
+Total sentences: 19899
+False True
+STAGE:2025-03-21 19:42:01 4474:4474 ActivityProfilerController.cpp:314] Completed Stage: Warm Up
+/home/rthapliyal/private/ece226/ece226-kv-cache/project/inference_europarl.py:155: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  tokens[k, :torch.tensor(t).shape[-1]] = torch.tensor(t, dtype=torch.long, device=device).squeeze(0)
+Generating tokens:   0%|                                                                             | 0/8 [00:00<?, ?it/s][W CPUAllocator.cpp:235] Memory block of unknown size was allocated before the profiling started, profiler results will not include the deallocation event
+curr pos:2, perplexity score 6233.681678413647
+Generating tokens:  12%|████████▋                                                            | 1/8 [00:00<00:03,  1.83it/s]curr pos:3, perplexity score 6350.873593793028
+curr pos:4, perplexity score 6344.439779771187
+curr pos:5, perplexity score 6386.000569068399
+curr pos:6, perplexity score 6373.667058508183
+curr pos:7, perplexity score 6323.091813639092
+curr pos:8, perplexity score 6249.722604081006
+curr pos:9, perplexity score 6190.838350904864
+Generating tokens: 100%|█████████████████████████████████████████████████████████████████████| 8/8 [00:00<00:00, 12.75it/s]
+STAGE:2025-03-21 19:42:10 4474:4474 ActivityProfilerController.cpp:320] Completed Stage: Collection
+STAGE:2025-03-21 19:42:10 4474:4474 ActivityProfilerController.cpp:324] Completed Stage: Post Processing
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                                                   Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg     Self CUDA   Self CUDA %    CUDA total  CUDA time avg       CPU Mem  Self CPU Mem      CUDA Mem  Self CUDA Mem    # of Calls  Total KFLOPs  
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                                        aten::embedding         0.04%     365.000us        28.02%     241.257ms      30.157ms     340.000us         0.04%     241.292ms      30.162ms           0 b           0 b     512.00 Kb           0 b             8            --  
+                                     aten::index_select         0.04%     356.000us        27.94%     240.629ms      30.079ms     240.490ms        27.81%     240.680ms      30.085ms           0 b           0 b     512.00 Kb           0 b             8            --  
+                                           aten::unbind         6.63%      57.061ms        17.68%     152.240ms       2.003ms      42.151ms         4.87%     152.532ms       2.007ms           0 b           0 b           0 b           0 b            76            --  
+                                           aten::select         7.73%      66.590ms         9.64%      83.026ms      11.740us      90.077ms        10.42%     114.292ms      16.161us           0 b           0 b           0 b           0 b          7072            --  
+                                             aten::item         6.65%      57.273ms         8.66%      74.605ms      11.371us      69.273ms         8.01%      99.127ms      15.109us           0 b           0 b           0 b           0 b          6561            --  
+                                           aten::matmul         0.70%       5.997ms         5.72%      49.239ms     323.941us       4.850ms         0.56%      50.612ms     332.974us           0 b           0 b      32.86 Mb      -9.56 Mb           152            --  
+                                          aten::softmax         0.04%     335.000us         4.83%      41.568ms       1.299ms     352.000us         0.04%      41.806ms       1.306ms           0 b           0 b      22.42 Mb           0 b            32            --  
+                                         aten::_softmax         0.05%     453.000us         4.78%      41.136ms       1.286ms      41.454ms         4.79%      41.454ms       1.295ms           0 b           0 b      22.42 Mb      22.42 Mb            32            --  
+                                           aten::linear         0.27%       2.359ms         4.63%      39.851ms     332.092us       2.342ms         0.27%      41.028ms     341.900us           0 b           0 b      30.40 Mb           0 b           120            --  
+                                              aten::pow         0.28%       2.430ms         3.82%      32.852ms     821.300us      31.580ms         3.65%      33.032ms     825.800us           0 b           0 b       2.50 Mb       2.50 Mb            40            --  
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+Self CPU time total: 861.093ms
+Self CUDA time total: 864.637ms
+
+Total CUDA Memory Usage: 0.00 MB
+Total CPU Memory Usage: 0.00 MB
+tensor(6190.8384, device='cuda:0', dtype=torch.float64)

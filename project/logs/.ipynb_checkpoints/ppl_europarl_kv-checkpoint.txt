@@ -1,0 +1,2 @@
+nohup: ignoring input
+python: can't open file '/home/rthapliyal/private/ece226/ece226-kv-cache/project/inference_europarl.py': [Errno 2] No such file or directory

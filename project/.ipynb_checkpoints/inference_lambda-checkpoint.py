@@ -126,8 +126,8 @@ def text_completion(model, prompts: list[int], temperature: float = 0.6, top_p: 
 
     eos_reached = torch.tensor([False] * batch_size, device=device)
 #     prompt_tokens_mask = tokens != pad_id  # True if the token is a prompt token, False otherwise
-    cur_iterator = tqdm(range(1, total_len), desc="Generating tokens")
-
+    # cur_iterator = tqdm(range(2, total_len), desc="Generating tokens")
+    cur_iterator = tqdm(range(2, score_index), desc="Generating tokens")
     for cur_pos in cur_iterator:
         with torch.no_grad():
             if model.is_kv_cache : # i will do token by token
@@ -138,15 +138,39 @@ def text_completion(model, prompts: list[int], temperature: float = 0.6, top_p: 
 
         next_token = torch.argmax(logits[:, -1], dim=-1)
         
-        if cur_pos > score_index:
+        # if cur_pos > score_index:
 
-            probs = torch.softmax(logits[:, -1], dim=-1).unsqueeze(1)
-            ground_truth_token = tokens[:, cur_pos].unsqueeze(1)  # Shape: (batch_size,1)
+        probs = torch.softmax(logits[:, -1], dim=-1).unsqueeze(1)
+        ground_truth_token = tokens[:, cur_pos].unsqueeze(1)  # Shape: (batch_size,1)
 
-            # Update the Perplexity metric
-            perplexity_metric.update(probs, ground_truth_token)
-            
-            # next_token = torch.argmax(logits[:, -1], dim=-1)
+        # Update the Perplexity metric
+        # perplexity_metric.update(probs, ground_truth_token)
+        
+        next_token = torch.argmax(logits[:, -1], dim=-1).unsqueeze(1)
+
+        # target_values = torch.tensor([2, 3]).to(device=device)
+        # mask = torch.any(next_token.view(-1, 1) == target_values, dim=1).view(32, 1)
+        # result1 = torch.any(mask)
+        # mask = torch.any(ground_truth_token.view(-1, 1) == target_values, dim=1).view(32, 1)
+        # result2 = torch.any(mask)
+
+        # if ~result1 and ~result2:
+
+        mask = (next_token != 0) & (next_token != 1)
+
+        # Step 2: Apply the mask to filter the target and probabilities
+        filtered_target = next_token[mask].unsqueeze(1).to(device=device) 
+        filtered_probs = probs[mask.squeeze(1)].to(device=device) 
+
+        perplexity_metric.update(filtered_probs, filtered_target)
+
+        print(f"curr pos:{cur_pos}, perplexity score {perplexity_metric.compute()}")
+
+        # elif ~result1:
+        #     print(f"it is there in ground truth:{ground_truth_token}")
+        # else:
+        #     print(f"it is there in prediction:{next_token}")
+                
             # acc = (next_token == ground_truth_token).sum().item() / total_len
             # print("accuracy: ",acc)
         

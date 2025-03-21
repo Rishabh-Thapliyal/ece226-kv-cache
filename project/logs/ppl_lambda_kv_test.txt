@@ -1,0 +1,38 @@
+nohup: ignoring input
+cuda
+False True
+STAGE:2025-03-21 19:09:16 3573:3573 ActivityProfilerController.cpp:314] Completed Stage: Warm Up
+/home/rthapliyal/private/ece226/ece226-kv-cache/project/inference_lambda.py:120: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  tokens[k, :torch.tensor(t).shape[-1]] = torch.tensor(t, dtype=torch.long, device=device).squeeze(0)
+Generating tokens:   0%|                                                                                      | 0/8 [00:00<?, ?it/s][W CPUAllocator.cpp:235] Memory block of unknown size was allocated before the profiling started, profiler results will not include the deallocation event
+curr pos:2, perplexity score 6901.5834467366985
+Generating tokens:  12%|█████████▊                                                                    | 1/8 [00:00<00:04,  1.69it/s]curr pos:3, perplexity score 6787.773549490856
+curr pos:4, perplexity score 6722.091866347549
+curr pos:5, perplexity score 6558.411130273448
+curr pos:6, perplexity score 6433.361875276211
+curr pos:7, perplexity score 6426.734076130728
+curr pos:8, perplexity score 6322.523014788609
+Generating tokens:  88%|████████████████████████████████████████████████████████████████████▎         | 7/8 [00:00<00:00, 12.58it/s]curr pos:9, perplexity score 6292.095619904013
+Generating tokens: 100%|██████████████████████████████████████████████████████████████████████████████| 8/8 [00:00<00:00, 10.98it/s]
+STAGE:2025-03-21 19:09:27 3573:3573 ActivityProfilerController.cpp:320] Completed Stage: Collection
+STAGE:2025-03-21 19:09:27 3573:3573 ActivityProfilerController.cpp:324] Completed Stage: Post Processing
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                                                   Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg     Self CUDA   Self CUDA %    CUDA total  CUDA time avg       CPU Mem  Self CPU Mem      CUDA Mem  Self CUDA Mem    # of Calls  Total KFLOPs  
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                                        aten::embedding         0.05%     464.000us        30.24%     290.312ms      36.289ms     456.000us         0.05%     290.369ms      36.296ms           0 b           0 b     512.00 Kb           0 b             8            --  
+                                     aten::index_select         0.06%     560.000us        30.16%     289.525ms      36.191ms     289.334ms        29.98%     289.603ms      36.200ms           0 b           0 b     512.00 Kb           0 b             8            --  
+                                           aten::unbind         7.14%      68.588ms        17.06%     163.781ms       2.155ms      45.547ms         4.72%     164.108ms       2.159ms           0 b           0 b           0 b           0 b            76            --  
+                                           aten::select         6.69%      64.184ms         8.50%      81.637ms      11.239us      95.495ms         9.90%     122.590ms      16.876us           0 b           0 b           0 b           0 b          7264            --  
+                                             aten::item         6.33%      60.791ms         8.17%      78.438ms      11.615us      70.503ms         7.31%     104.167ms      15.425us           0 b           0 b           0 b           0 b          6753            --  
+                                           aten::matmul         0.93%       8.925ms         6.28%      60.296ms     396.684us       7.870ms         0.82%      61.805ms     406.612us           0 b           0 b      30.63 Mb     -11.00 Mb           152            --  
+                                           aten::linear         0.34%       3.289ms         5.37%      51.508ms     429.233us       3.458ms         0.36%      52.699ms     439.158us           0 b           0 b      29.61 Mb           0 b           120            --  
+                                          aten::softmax         0.05%     484.000us         3.76%      36.089ms       1.128ms     575.000us         0.06%      36.360ms       1.136ms           0 b           0 b      20.60 Mb           0 b            32            --  
+                                            aten::index         0.20%       1.968ms         3.72%      35.732ms       1.489ms      18.364ms         1.90%      35.951ms       1.498ms           0 b           0 b       9.57 Mb       9.56 Mb            24            --  
+                                         aten::_softmax         0.07%     660.000us         3.69%      35.458ms       1.108ms      35.785ms         3.71%      35.785ms       1.118ms           0 b           0 b      20.60 Mb      20.60 Mb            32            --  
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+Self CPU time total: 960.028ms
+Self CUDA time total: 964.975ms
+
+Total CUDA Memory Usage: 0.00 MB
+Total CPU Memory Usage: 0.00 MB
+tensor(6292.0956, device='cuda:0', dtype=torch.float64)

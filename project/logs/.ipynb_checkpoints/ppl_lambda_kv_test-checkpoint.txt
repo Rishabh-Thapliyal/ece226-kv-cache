@@ -1,0 +1,3 @@
+nohup: ignoring input
+usage: inference_lambda.py [-h] [--device {cuda,cpu,mps}] [--kvcache KVCACHE] [--training TRAINING]
+inference_lambda.py: error: argument --kvcache: Boolean value expected.

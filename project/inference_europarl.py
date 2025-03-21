@@ -57,19 +57,53 @@ from data_loader import numericalize
 from torch.utils.data import DataLoader
 from torch.nn.utils.rnn import pad_sequence
 
+import kagglehub
+import os
+
 import datasets
 from datasets import load_dataset
-ds = load_dataset("EleutherAI/lambada_openai", "en")
+
+# Download latest version
+path = kagglehub.dataset_download("nltkdata/europarl")
+
+print("Path to dataset files:", path)
+
+# p = "/Users/rishabh/.cache/kagglehub/datasets/nltkdata/europarl/versions/1/europarl_raw/english"
+
+sentences = []
+
+path_for_english = os.path.join(path, "europarl_raw/english")
+# Iterate over all files in the directory
+for filename in os.listdir(path_for_english):
+    # Check if the file has a .en extension
+    if filename.endswith('.en'):
+        file_path = os.path.join(path_for_english, filename)
+        # Open the file and read its contents
+        with open(file_path, 'r', encoding='utf-8') as file:
+            for line in file:
+                # Strip whitespace and add the sentence to the list
+                sentence = line.strip()
+                if sentence:  # Ensure the line is not empty
+                    sentences.append(sentence)
+
+# Print the first 5 sentences as a check
+print("First 5 sentences:")
+for i, sentence in enumerate(sentences[:5]):
+    print(f"{i + 1}: {sentence}")
+
+# Print the total number of sentences
+print(f"Total sentences: {len(sentences)}")
+
 
 # Tokenize the dataset
 def tokenize_dataset(dataset):
     tokenized_data = []
     for example in dataset:
-        tokenized_text = numericalize(example['text'])
+        tokenized_text = numericalize(example)
         tokenized_data.append(tokenized_text)
     return tokenized_data
 
-test_data = tokenize_dataset(ds['test'])
+test_data = tokenize_dataset(sentences)
 
 def collate_fn(batch):
     # Pad sequences to the same length
@@ -79,6 +113,7 @@ def collate_fn(batch):
 # Create DataLoader for training and test sets
 batch_size = 32
 test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
+
 
 # --------------------- END --------------------------------------
 
