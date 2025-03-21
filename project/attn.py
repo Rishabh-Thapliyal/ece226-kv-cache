@@ -1,6 +1,12 @@
 import torch
 from model_args import ModelArgs
 from emb import apply_rotary_emb
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import math
+from typing import Optional
+
 
 def reshape_for_broadcast(freqs_cis: torch.Tensor, x: torch.Tensor):
     """
@@ -25,13 +31,6 @@ def reshape_for_broadcast(freqs_cis: torch.Tensor, x: torch.Tensor):
     assert freqs_cis.shape == (x.shape[1], x.shape[-1])
     shape = [d if i == 1 or i == ndim - 1 else 1 for i, d in enumerate(x.shape)]
     return freqs_cis.view(*shape)
-
-
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import math
-from typing import Optional
 
 
 class CustomAttention(nn.Module):
