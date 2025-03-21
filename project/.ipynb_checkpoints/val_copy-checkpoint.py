@@ -96,7 +96,7 @@ original_target = []
 d = {}
 results = []
 
-inference_data_count = 2
+inference_data_count = 10
 c = 0
 
 with profiler.profile(
@@ -128,6 +128,7 @@ with profiler.profile(
             break
 
 print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=10))
+
 # table = []
 # for avg in prof.key_averages():
 #     table.append([
@@ -153,10 +154,10 @@ print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=10))
 # print(f"Total CPU Memory: {total_cpu_memory:.2f} MB")
 # print(f"Total CUDA Memory: {total_cuda_memory:.2f} MB")
 
-for i in range(len(results)):
+# for i in range(len(results)):
 
-    print(f"Input Text: {' '.join(results[i][0])}")
-    print(f"Generated Text: {' '.join(results[i][1])}")
+#     print(f"Input Text: {' '.join(results[i][0])}")
+#     print(f"Generated Text: {' '.join(results[i][1])}")
     # print(f"Actual Text: {" ".join(results[i][2])}")
     # print(results[i])
     # break

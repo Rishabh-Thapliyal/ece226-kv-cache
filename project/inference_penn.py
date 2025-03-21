@@ -8,8 +8,20 @@ import torch
 from data_loader import vocab, train_loader, valid_loader, numericalize_validation
 import torch
 import torch.autograd.profiler as profiler
+from torcheval.metrics import Perplexity
 
 # Set up argument parser
+def str_to_bool(value):
+    if isinstance(value, bool):
+        return value
+    if value.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif value.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
+
+        
 parser = argparse.ArgumentParser(description="Choose the device for computation.")
 parser.add_argument(
     "--device",
@@ -18,12 +30,25 @@ parser.add_argument(
     choices=["cuda", "cpu", "mps"],
     help="Device to use for computation (cuda, cpu, or mps).",
 )
+parser.add_argument(
+    "--kvcache",
+    type=str_to_bool,
+    default=True,
+    help="Inference with or without KV Cache (True/False)",
+)
+parser.add_argument(
+    "--training",
+    type=str_to_bool,
+    default=False,
+    help="Training yes or no",
+)
 
 # Parse arguments
 args = parser.parse_args()
 
 # Set the device
 device = args.device
+perplexity_metric = Perplexity(device = device)
 
 print(device)
 
@@ -31,15 +56,23 @@ model_args = ModelArgs()
 model_args.vocab_size = len(vocab)
 model_args.device = device
 
-model_args.is_training = False
+# ------------------ Training and KV Cache flags ---------------------
+model_args.is_training = args.training
+model_args.is_kv_cache = args.kvcache
+print(model_args.is_training, model_args.is_kv_cache)
+# ---------------------------------------
+
+
 model = CustomTransformer(model_args).to(device)
 model.load_state_dict(torch.load('./model_60'), )
 
 
-def text_completion(model, prompts: list[int], temperature: float = 0.6, top_p: float = 0.9,
+def text_completion(model, target_batch, prompts: list[int], temperature: float = 0.6, top_p: float = 0.9,
                     max_gen_len: Optional[int] = None):
     model.eval()  # Set model to evaluation mode
     model.is_training = False
+#     model_args.is_kv_cache = False
+    
     prompts = prompts.to(device)
     if max_gen_len is None:
         max_gen_len = model.max_seq_len - 1
@@ -63,10 +96,19 @@ def text_completion(model, prompts: list[int], temperature: float = 0.6, top_p: 
 
     for cur_pos in cur_iterator:
         with torch.no_grad():
-            model.is_training = False
-            logits = model(tokens[:, cur_pos - 1:cur_pos], cur_pos - 1)
-
+            
+            if model.is_kv_cache : # i will do token by token
+                logits = model(tokens[:, cur_pos - 1:cur_pos], cur_pos - 1)
+            else:
+                logits = model(tokens[:, :cur_pos], 0)
+                
         next_token = torch.argmax(logits[:, -1], dim=-1)
+        probs = torch.softmax(logits[:, -1], dim=-1).unsqueeze(1)
+        ground_truth_token = target_batch[:, cur_pos].unsqueeze(1)  # Shape: (batch_size,1)
+
+        # Update the Perplexity metric
+        perplexity_metric.update(probs, ground_truth_token)
+        
 
         next_token = next_token.reshape(-1)
         # Only replace token if it is a padding token
@@ -96,8 +138,9 @@ original_target = []
 d = {}
 results = []
 
-inference_data_count = 10
+inference_data_count = 20
 c = 0
+
 
 with profiler.profile(
                           enabled=True,
@@ -118,7 +161,7 @@ with profiler.profile(
         for p in target_batch:
             original_target.append([vocab.get_itos()[tok] for tok in (p)])
     
-        out_tokens, out_texts = text_completion(model, input_batch, temperature=0, max_gen_len=64)
+        out_tokens, out_texts = text_completion(model, target_batch, input_batch, temperature=0, max_gen_len=0)
     
         for i in range(len(out_texts)):
             results.append((original_prompt[i], out_texts[i] ,original_target[i]))
@@ -128,6 +171,23 @@ with profiler.profile(
             break
 
 print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=10))
+# Extract total CUDA and CPU memory usage
+total_cuda_memory = 0
+total_cpu_memory = 0
+
+for event in prof.key_averages():
+    if event.key == "cuda_memory_usage":
+        total_cuda_memory += event.cuda_memory_usage
+    elif event.key == "cpu_memory_usage":
+        total_cpu_memory += event.cpu_memory_usage
+
+# Print total memory usage
+print(f"Total CUDA Memory Usage: {total_cuda_memory / 1024 ** 2:.2f} MB")
+print(f"Total CPU Memory Usage: {total_cpu_memory / 1024 ** 2:.2f} MB")
+
+perplexity = perplexity_metric.compute()
+print(perplexity)
+
 
 # table = []
 # for avg in prof.key_averages():

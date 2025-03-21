@@ -1,0 +1,127 @@
+nohup: ignoring input
+cuda
+STAGE:2025-03-19 19:11:49 2378281:2378281 ActivityProfilerController.cpp:314] Completed Stage: Warm Up
+/home/rthapliyal/ece226-kv-cache/project/inference_penn.py:68: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  tokens[k, :torch.tensor(t).shape[-1]] = torch.tensor(t, dtype=torch.long, device=device).squeeze(0)
+Generating tokens:   0%|                                                                                              | 0/42 [00:00<?, ?it/s]here
+[W CPUAllocator.cpp:249] Memory block of unknown size was allocated before the profiling started, profiler results will not include the deallocation event
+Generating tokens:   2%|██                                                                                    | 1/42 [00:00<00:33,  1.21it/s]here
+here
+here
+here
+here
+here
+here
+here
+here
+Generating tokens:  24%|████████████████████▏                                                                | 10/42 [00:00<00:02, 14.22it/s]here
+here
+here
+here
+here
+here
+here
+here
+here
+here
+here
+here
+Generating tokens:  52%|████████████████████████████████████████████▌                                        | 22/42 [00:01<00:00, 32.07it/s]here
+here
+here
+here
+here
+here
+here
+here
+here
+here
+here
+Generating tokens:  79%|██████████████████████████████████████████████████████████████████▊                  | 33/42 [00:01<00:00, 46.56it/s]here
+here
+here
+here
+here
+here
+here
+here
+here
+Generating tokens: 100%|█████████████████████████████████████████████████████████████████████████████████████| 42/42 [00:01<00:00, 33.97it/s]
+Generating tokens:   0%|                                                                                              | 0/55 [00:00<?, ?it/s]here
+here
+here
+here
+here
+here
+here
+here
+here
+here
+here
+here
+Generating tokens:  22%|██████████████████▎                                                                 | 12/55 [00:00<00:00, 118.97it/s]here
+here
+here
+here
+here
+here
+here
+here
+here
+here
+here
+here
+Generating tokens:  44%|████████████████████████████████████▋                                               | 24/55 [00:00<00:00, 118.12it/s]here
+here
+here
+here
+here
+here
+here
+here
+here
+here
+here
+here
+Generating tokens:  65%|██████████████████████████████████████████████████████▉                             | 36/55 [00:00<00:00, 107.79it/s]here
+here
+here
+here
+here
+here
+here
+here
+here
+here
+here
+Generating tokens:  85%|███████████████████████████████████████████████████████████████████████▊            | 47/55 [00:00<00:00, 107.58it/s]here
+here
+here
+here
+here
+here
+here
+here
+Generating tokens: 100%|████████████████████████████████████████████████████████████████████████████████████| 55/55 [00:00<00:00, 107.96it/s]
+STAGE:2025-03-19 19:11:54 2378281:2378281 ActivityProfilerController.cpp:320] Completed Stage: Collection
+STAGE:2025-03-19 19:11:54 2378281:2378281 ActivityProfilerController.cpp:324] Completed Stage: Post Processing
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                                                   Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg     Self CUDA   Self CUDA %    CUDA total  CUDA time avg       CPU Mem  Self CPU Mem      CUDA Mem  Self CUDA Mem    # of Calls  Total MFLOPs  
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                                           aten::matmul         3.50%      60.624ms        20.57%     355.719ms     193.011us      45.157ms         2.50%     496.169ms     269.218us           0 b           0 b       6.73 Gb    -823.25 Mb          1843            --  
+                                           aten::linear         1.28%      22.146ms        15.50%     268.159ms     184.302us      16.053ms         0.89%     390.457ms     268.355us           0 b           0 b       6.27 Gb           0 b          1455            --  
+                                               aten::mm         4.32%      74.723ms         7.99%     138.221ms      94.997us     294.984ms        16.34%     294.984ms     202.738us           0 b           0 b       6.27 Gb       6.27 Gb          1455   1860173.529  
+                                           aten::unbind         3.40%      58.786ms         9.35%     161.679ms     693.901us      47.517ms         2.63%     162.383ms     696.923us           0 b           0 b           0 b           0 b           233            --  
+                                           aten::select         4.08%      70.527ms         5.32%      92.101ms       8.823us      94.976ms         5.26%     124.206ms      11.898us           0 b           0 b           0 b           0 b         10439            --  
+                                        aten::embedding         0.31%       5.285ms         6.02%     104.084ms       1.073ms       4.946ms         0.27%     104.506ms       1.077ms           0 b           0 b     160.99 Mb    -566.00 Kb            97            --  
+                                     aten::index_select         0.43%       7.387ms         5.28%      91.355ms     941.804us      90.847ms         5.03%      92.154ms     950.041us           0 b           0 b     160.94 Mb           0 b            97            --  
+                                              aten::sum         0.24%       4.213ms         5.00%      86.514ms     445.948us      43.696ms         2.42%      87.283ms     449.912us           0 b           0 b      97.00 Kb      48.50 Kb           194            --  
+                                          aten::reshape         1.62%      28.012ms         4.20%      72.728ms      23.430us      28.274ms         1.57%      77.693ms      25.030us           0 b           0 b     931.96 Mb           0 b          3104            --  
+                                              aten::pow         0.91%      15.698ms         4.48%      77.429ms     159.647us      71.724ms         3.97%      75.644ms     155.967us           0 b           0 b     782.87 Mb     782.87 Mb           485            --  
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+Self CPU time total: 1.730s
+Self CUDA time total: 1.806s
+
+Total CUDA Memory Usage: 0.00 MB
+Total CPU Memory Usage: 0.00 MB
+tensor(9862.9864, device='cuda:0', dtype=torch.float64)
